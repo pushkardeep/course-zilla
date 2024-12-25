@@ -6,6 +6,7 @@ import { setLoading } from "../../redux/slices/loading-slice";
 
 export const register = async (data, dispatch) => {
   try {
+    console.log("first, ", import.meta.env.VITE_SERVER_URI);
     dispatch(setLoading(true));
     const response = await fetch(
       data,
@@ -33,6 +34,7 @@ export const register = async (data, dispatch) => {
 
 export const logIn = async (data, dispatch) => {
   try {
+    console.log("first, ", import.meta.env.VITE_SERVER_URI);
     dispatch(setLoading(true));
     const response = await fetch(
       data,
