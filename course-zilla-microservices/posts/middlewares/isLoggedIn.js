@@ -30,12 +30,10 @@ const isLoggedIn = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    return res
-      .status(500)
-      .json({
-        success: false,
-        message: error.message || "Internal server error",
-      });
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Internal server error",
+    });
   }
 };
 

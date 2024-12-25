@@ -47,15 +47,17 @@ function Feed() {
 
         {/* video placer  */}
         <div className="flex-1 h-full z-10 overflow-y-auto">
-          <div className="max-w-[1320px] h-fit mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-2 p-3">
-            {courses &&
-              courses.map((e, i) => (
-                <VideoCard
-                  key={i}
-                  course={e}
-                />
+          {courses && courses.length > 0 ? (
+            <div className="max-w-[1320px] h-fit mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-2 p-3">
+              {courses.map((e, i) => (
+                <VideoCard key={i} course={e} />
               ))}
-          </div>
+            </div>
+          ) : (
+            <div className="w-full h-full flex justify-center items-center text-black dark:text-white">
+              <h1>No courses available</h1>
+            </div>
+          )}
         </div>
       </div>
     </div>

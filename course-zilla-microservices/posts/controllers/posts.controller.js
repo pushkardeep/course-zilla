@@ -63,9 +63,8 @@ const getCourses = async (req, res) => {
 
     // Fetch courses
     const courses = await postModel.find();
-    console.log(courses);
 
-    if (!courses || courses.length === 0) {
+    if (!courses) {
       return res.status(400).json({
         success: false,
         message: "No courses found",
