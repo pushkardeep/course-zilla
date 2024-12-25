@@ -9,7 +9,7 @@ const corsOptions = {
   };
 
 app.use(cors(corsOptions));
-app.get("/",(res, res)=>{
+app.get("/",(req, res)=>{
 res.send("Gateway is working fine")
 })
 
