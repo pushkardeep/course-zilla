@@ -9,6 +9,9 @@ const corsOptions = {
   };
 
 app.use(cors(corsOptions));
+app.get("/",(res, res)=>{
+res.send("Gateway is working fine")
+})
 
 app.use("/users", proxy(process.env.USER_MICROSERVICE_URI));
 app.use("/posts", proxy(process.env.POST_MICROSERVICE_URI));
