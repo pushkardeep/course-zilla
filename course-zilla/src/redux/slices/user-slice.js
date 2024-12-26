@@ -7,16 +7,20 @@ const userSlice = createSlice({
   },
   reducers: {
     setUser: (state, action) => {
-      const { username, email, dp } = action.payload;
-      state.user = { username, email, dp };
+      const { username, email, dp, _id } = action.payload;
+      state.user = { username, email, dp, _id };
     },
 
     removeUser: (state) => {
       state.user = null;
     },
+
+    changeImage: (state, action) => {
+      state.user.dp = action.payload;
+    },
   },
 });
 
-export const { setUser, removeUser } = userSlice.actions;
+export const { setUser, removeUser, changeImage } = userSlice.actions;
 
 export default userSlice.reducer;

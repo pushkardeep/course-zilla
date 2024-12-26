@@ -78,3 +78,27 @@ export const fetchVideo = async (id, token) => {
     return { success: false, message: error.message || "Something went wrong" };
   }
 };
+
+export const searchCourse = async (query, dispatch, token) => {
+  try {
+    const { success, message, course } = await fetch(
+      { title: query },
+      import.meta.env.VITE_SERVER_URI,
+      endpoints.SEARCH_API,
+      "POST",
+      undefined,
+      undefined,
+      token
+    );
+    if (!success) {
+      return {
+        success: false,
+        message: message || "Something went wrong",
+      };
+    }
+    dispatch(setCourses(course));
+    return { success: true };
+  } catch (error) {
+    return { success: false, message: error.message || "Something went wrong" };
+  }
+};

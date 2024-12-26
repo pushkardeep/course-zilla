@@ -1,8 +1,9 @@
 import React from "react";
-import { DarkThemeToggle } from "flowbite-react";
-import { HiMenu, HiOutlineArrowRight } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+
+import { DarkThemeToggle } from "flowbite-react";
+import { HiMenu, HiOutlineArrowRight } from "react-icons/hi";
 
 import ProfileDropdown from "./profileDropdown";
 import Searchbar from "./searchbar";
@@ -33,7 +34,7 @@ function Navigationbar({ sliderRef }) {
         <div className="flex items-center gap-1.5">
           <DarkThemeToggle />
           <div className="hidden md:block">
-            <Searchbar />
+            <Searchbar sliderRef={sliderRef} />
           </div>
           <button
             onClick={toggleMenu}

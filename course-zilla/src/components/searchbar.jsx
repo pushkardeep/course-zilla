@@ -1,8 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-function Searchbar() {
+function Searchbar({sliderRef}) {
+  // Correctly destructure sliderRef from props
+  const navigate = useNavigate();
+
+  const [search, setSearch] = useState("");
+
+  const toggleMenu = () => {
+    if (sliderRef.current) {
+      sliderRef.current.classList.toggle("-translate-x-[100%]");
+      sliderRef.current.classList.toggle("-translate-x-[0%]");
+    }
+  };
+
+  const handleChange = (e) => {
+    setSearch(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    toggleMenu();
+    navigate(`/feed?search=${search}`);
+  };
+
   return (
-    <form className="w-full md:w-60 lg:w-96 flex items-center mx-auto">
+    <form
+      onSubmit={handleSubmit}
+      className="w-full md:w-60 lg:w-96 flex items-center mx-auto"
+    >
       <label htmlFor="simple-search" className="sr-only">
         Search
       </label>
@@ -25,11 +51,13 @@ function Searchbar() {
           </svg>
         </div>
         <input
+          onChange={handleChange}
           type="text"
           id="simple-search"
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Search branch name..."
           required
+          value={search}
         />
       </div>
       <button

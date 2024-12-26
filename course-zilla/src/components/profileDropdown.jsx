@@ -1,9 +1,9 @@
-// hooks etc
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-import { Avatar, Dropdown } from "flowbite-react";
+import { Dropdown } from "flowbite-react";
+import { logOut } from "../services/auth/auth.service";
 
 function ProfileDropdown() {
   const dispatch = useDispatch();
@@ -17,10 +17,10 @@ function ProfileDropdown() {
       arrowIcon={false}
       inline
       label={
-        <Avatar
-          alt="User settings"
-          img={user?.dp || "https://placehold.co/400"}
-          rounded
+        <img
+          className="w-10 h-10 rounded-full object-cover"
+          src={user?.dp || "https://placehold.co/400"}
+          alt="Dp"
         />
       }
     >
@@ -37,7 +37,9 @@ function ProfileDropdown() {
         <Dropdown.Item>Create Post</Dropdown.Item>
       </Link>
       <Dropdown.Divider />
-      <Dropdown.Item onClick={onClick}>Sign out</Dropdown.Item>
+      <Dropdown.Item onClick={()=>{
+        logOut(dispatch)
+      }}>Sign out</Dropdown.Item>
     </Dropdown>
   );
 }

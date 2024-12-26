@@ -1,7 +1,7 @@
 import { fetch } from "../../utils/fetch";
 import { endpoints } from "../endpoints";
 
-import { setToken } from "../../redux/slices/token-slice";
+import { setToken, removeToken } from "../../redux/slices/token-slice";
 import { setLoading } from "../../redux/slices/loading-slice";
 
 export const register = async (data, dispatch) => {
@@ -56,4 +56,8 @@ export const logIn = async (data, dispatch) => {
     dispatch(setLoading(false));
     return { success: false, message: error.message || "Something went wrong" };
   }
+};
+
+export const logOut = async (dispatch) => {
+  dispatch(removeToken());
 };

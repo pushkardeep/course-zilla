@@ -138,4 +138,48 @@ const getVideo = async (req, res) => {
   }
 };
 
-module.exports = { createPost, getCourses, getVideo };
+const searchCourse = async (req, res) => {
+  try {
+    const { title } = req.body;
+
+    if (!title) {
+      return res.status(400).json({
+        success: false,
+        message: "Course not found",
+      });
+    }
+
+    const user = req.user;
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Fetch course details
+    const course = await postModel.find({
+      title: { $regex: title, $options: "i" },
+    });
+
+    if (!course) {
+      return res.status(400).json({
+        success: false,
+        message: "Error in finding course",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      course,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message || "An error occurred while fetching course",
+    });
+  }
+};
+
+module.exports = { createPost, getCourses, getVideo, searchCourse };

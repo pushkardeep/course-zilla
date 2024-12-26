@@ -1,13 +1,48 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+import { IoMdCamera } from "react-icons/io";
+import { Spinner } from "flowbite-react";
+
+import { changeDp } from "../services/user/user.service";
+import { setFlash } from "../redux/slices/flash-slice";
+
+import { logOut } from "../services/auth/auth.service";
 
 const Profile = () => {
+  const inputRef = useRef();
+  const dispatch = useDispatch();
+
+  const { token } = useSelector((state) => state.token);
   const { user } = useSelector((state) => state.user);
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleClick = () => {
+    if (inputRef.current !== null) {
+      inputRef.current.click();
+    }
+  };
+
+  const handleChange = async (e) => {
+    setLoading(true);
+    const response = await changeDp(e.target.files[0], dispatch, token);
+    if (!response.success) {
+      setLoading(false);
+      return dispatch(
+        setFlash({
+          type: "danger",
+          message: response.message || "Uploadtion error",
+        })
+      );
+    }
+    setLoading(false);
   };
 
   return (
@@ -39,39 +74,50 @@ const Profile = () => {
             >
               <ul className="py-2" aria-labelledby="dropdownButton">
                 <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                  >
-                    Edit
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                  >
-                    Export Data
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
+                  <button
+                    onClick={() => {
+                      logOut(dispatch);
+                    }}
                     className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                   >
-                    Delete
-                  </a>
+                    Log out
+                  </button>
                 </li>
               </ul>
             </div>
           )}
         </div>
         <div className="flex flex-col items-center pb-10">
-          <img
-            className="w-24 h-24 mb-3 rounded-full shadow-lg"
-            src={user?.dp || "https://placehold.co/400"}
-            alt="Bonnie image"
-          />
+          <div
+            className={`w-24 h-24 mb-3 rounded-full shadow-lg flex justify-center items-center relative ${
+              loading ? "bg-gray-600" : null
+            }`}
+          >
+            {loading ? (
+              <Spinner />
+            ) : (
+              <>
+                <img
+                  className="w-full h-full rounded-full object-cover"
+                  src={user?.dp || "https://placehold.co/400"}
+                  alt="Bonnie image"
+                />
+                <span
+                  onClick={handleClick}
+                  className="cursor-pointer absolute top-16 left-16 text-white bg-blue-700 hover:bg-blue-600 p-2 rounded-full shadow-lg"
+                >
+                  <IoMdCamera />
+                </span>
+              </>
+            )}
+            <input
+              onChange={handleChange}
+              ref={inputRef}
+              hidden
+              type="file"
+              accept="image/*"
+            />
+          </div>
           <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
             {user?.username}
           </h5>

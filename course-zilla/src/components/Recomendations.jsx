@@ -29,9 +29,7 @@ function Recomendations() {
   };
 
   useEffect(() => {
-    if (!courses) {
-      fetchPosts();
-    }
+    fetchPosts();
   }, []);
   return (
     <div className="w-full lg:w-80 xl:w-96 h-fit lg:h-full rounded-md lg:rounded-none flex flex-col gap-2 z-20 border-2 lg:border-0 lg:border-l-2  border-gray-200 bg-gray-50 dark:bg-gray-800 px-3 py-4 dark:border-gray-700 lg:overflow-y-auto mt-2 lg:mt-0">

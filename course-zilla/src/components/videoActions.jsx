@@ -7,17 +7,14 @@ import { useDispatch, useSelector } from "react-redux";
 function VideoActions({ loading }) {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.token);
-  const { creator } = useSelector((state) => state.watch);
+  const { user } = useSelector((state) => state.user);
   const { course } = useSelector((state) => state.watch);
+  const { creator } = useSelector((state) => state.watch);
   const [followLoading, setFollowLoading] = useState(false);
 
   const onFollow = async () => {
     setFollowLoading(true);
-    const response = await handleFollowers(
-      { creatorId: creator._id },
-      dispatch,
-      token
-    );
+    await handleFollowers({ creatorId: creator._id }, dispatch, token);
     setFollowLoading(false);
   };
   return (
@@ -47,16 +44,24 @@ function VideoActions({ loading }) {
               </div>
             </div>
 
-            <button className=" text-white dark:text-black bg-black border hover:bg-[#0c0c0c] focus:outline-none font-medium rounded-full text-sm px-3.5 py-2 dark:bg-zinc-300 dark:hover:bg-zinc-400">
-              {followLoading ? (
-                "Loading"
-              ) : (
-                <div onClick={onFollow} className="flex items-center gap-2">
-                  <FaBell className="h-full" />
-                  Subscribe
-                </div>
-              )}
-            </button>
+            {followLoading ? (
+              <span className="text-white dark:text-black bg-black border hover:bg-[#0c0c0c] focus:outline-none font-medium rounded-full text-sm px-3.5 py-2 dark:bg-zinc-300 dark:hover:bg-zinc-400">
+                Loading
+              </span>
+            ) : (
+              <button
+                onClick={user._id === creator._id ? null : onFollow}
+                className={`flex items-center gap-2 text-white dark:text-black bg-black border hover:bg-[#0c0c0c] focus:outline-none font-medium rounded-full text-sm px-3.5 py-2 dark:bg-zinc-300 dark:hover:bg-zinc-400 
+                ${
+                  user._id === creator._id
+                    ? "cursor-not-allowed bg-gray-400 dark:bg-zinc-600 dark:text-gray-400 hover:bg-transparent hover:text-black dark:hover:bg-transparent"
+                    : ""
+                }`}
+              >
+                <FaBell className="h-full" />
+                Subscribe
+              </button>
+            )}
           </div>
 
           <div className="w-full mt-3 border-2 rounded-md border-gray-300 bg-gray-50 text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-white px-2 py-2">

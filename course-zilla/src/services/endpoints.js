@@ -5,5 +5,7 @@ export const endpoints = {
   CREATE_POST_API: "/posts/create-post",
   COURSES_API: "/posts/get-courses",
   VIDEO_API: "/posts/get-video",
-  HANDLE_FOLLOWERS_API: "/users/handle-followers"
+  SEARCH_API: "/posts/search",
+  CHANGE_DP_API: "/users/update-dp",
+  HANDLE_FOLLOWERS_API: "/users/handle-followers",
 };

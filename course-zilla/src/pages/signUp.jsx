@@ -23,8 +23,8 @@ function SignUp() {
   };
 
   return (
-    <div className="w-full min-h-screen flex justify-center items-center dark:bg-gray-900">
-      <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
+    <div className="w-full min-h-screen flex justify-center items-center dark:bg-gray-900 p-4">
+      <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow p-8 dark:bg-gray-800 dark:border-gray-700">
         <form className="space-y-4" onSubmit={onSubmit}>
           <h5 className="text-xl font-medium text-gray-900 dark:text-white">
             Register in to course zilla

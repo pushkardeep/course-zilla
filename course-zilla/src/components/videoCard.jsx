@@ -20,15 +20,11 @@ const VideoCard = ({ course }) => {
           src={course?.coverUrl}
           alt="Video Thumbnail"
         />
-
-        <div className="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white text-xs px-2 py-1 rounded-md">
-          12:34
-        </div>
       </div>
 
       <div className="w-full flex p-2 overflow-hidden">
         <img
-          className="w-10 h-10 rounded-full"
+          className="w-10 h-10 rounded-full object-cover"
           src={course?.creator?.dp || "https://placehold.co/400"}
           alt="Channel Logo"
         />

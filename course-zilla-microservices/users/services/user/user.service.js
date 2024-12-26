@@ -57,4 +57,16 @@ const addFollowers = async (creatorId, followerId) => {
   }
 };
 
-module.exports = { createUser, addFollowers };
+const changeDp = async (imgUrl, userId) => {
+  try {
+    const user = await userModel.findById({ _id: userId });
+    if (!user) return { success: false, message: "User not found" };
+    user.dp = imgUrl;
+    await user.save();
+    return { success: true, user };
+  } catch (error) {
+    return { success: false, message: error.message || "Dp changing error" };
+  }
+};
+
+module.exports = { createUser, addFollowers, changeDp };

@@ -1,5 +1,5 @@
 const userModal = require("../../models/user.model");
-const { addFollowers } = require("../../services/user/user.service");
+const { addFollowers, changeDp } = require("../../services/user/user.service");
 
 const profile = async (req, res) => {
   try {
@@ -62,4 +62,38 @@ const pushFollowers = async (req, res) => {
   }
 };
 
-module.exports = { profile, pushFollowers };
+const updateDp = async (req, res) => {
+  try {
+    const { _id } = req.user;
+    const { imgUrl } = req.body;
+
+    if (!_id) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User not found." });
+    }
+
+    if (!imgUrl) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Image not found." });
+    }
+
+   const {success, message, user} = await changeDp(imgUrl, _id);
+
+   if (!success) {
+    return res
+      .status(400)
+      .json({ success: false, message: message || "Dp changing error." });
+  }
+
+    res.status(200).json({ success: true, user });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Internal server error",
+    });
+  }
+};
+
+module.exports = { profile, pushFollowers, updateDp };
