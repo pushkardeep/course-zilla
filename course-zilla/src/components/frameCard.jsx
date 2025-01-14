@@ -1,5 +1,7 @@
 import React from "react";
 import { formatDistanceToNow } from "date-fns";
+import { FaDownload } from "react-icons/fa6";
+import { FaShare } from "react-icons/fa";
 
 function FrameCard({ frame }) {
   console.log(frame);
@@ -11,9 +13,24 @@ function FrameCard({ frame }) {
         className="w-full h-full shadow-md object-cover"
       />
       <div className="w-full py-2 px-4 overflow-hidden">
-        <h1 className="text-black dark:text-white text-sm">
-          {frame?.title || "Creator"}
-        </h1>
+        <div className="w-full flex items-center justify-between">
+          <h1 className="text-black dark:text-white text-sm">
+            {frame?.title || "Creator"}
+          </h1>
+          <div className="w-fit flex items-center gap-2">
+            <a
+              href={frame?.frameImgUrl.replace(
+                "/upload/",
+                "/upload/fl_attachment/"
+              )}
+              download
+            >
+              <FaDownload className="text-black dark:text-white text-sm opacity-40 hover:opacity-100 transition-all" />
+            </a>
+
+            <FaShare className="text-black dark:text-white text-sm opacity-40 hover:opacity-100 transition-all" />
+          </div>
+        </div>
         <div className="flex items-center gap-1.5 mt-1.5">
           <img
             src={frame?.user?.dp}
