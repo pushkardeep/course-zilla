@@ -1,21 +1,12 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 
 import { FileInput, Label } from "flowbite-react";
 import { Spinner } from "flowbite-react";
 
-import { imgUploader } from "../services/cloudinary/img-uploader";
-
-import { setCoverUrl } from "../redux/slices/post-creation-slice";
-import { setFlash } from "../redux/slices/flash-slice";
-
 import { useBeforeunload } from "react-beforeunload";
 
-function ImageUploader() {
-  const dispatch = useDispatch();
-
+function ImageUploader({ onChange, coverImgUrl }) {
   const [isUploading, setIsUploading] = useState(false);
-  const { coverUrl } = useSelector((state) => state.postCreation);
 
   useBeforeunload((event) => {
     if (isUploading) {
@@ -23,24 +14,10 @@ function ImageUploader() {
     }
   });
 
-  const onChange = async (e) => {
-    setIsUploading(true);
-    const result = await imgUploader(e.target.files[0]);
-    if (result.success) {
-      dispatch(setCoverUrl(result.url));
-      dispatch(
-        setFlash({ type: "success", message: "Image Uploaded Succesfully" })
-      );
-    } else {
-      dispatch(setFlash({ type: "danger", message: result.message }));
-    }
-    setIsUploading(false);
-  };
-
   return (
     <div className="flex w-full items-center justify-center">
       {!isUploading ? (
-        coverUrl ? null : (
+        coverImgUrl ? null : (
           <Label
             htmlFor="dropzone-file"
             className="flex h-52 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
@@ -70,7 +47,7 @@ function ImageUploader() {
               </p>
             </div>
             <FileInput
-              onChange={onChange}
+              onChange={(e) => onChange(e, setIsUploading)}
               required
               id="dropzone-file"
               className="hidden"
@@ -82,11 +59,11 @@ function ImageUploader() {
           <Spinner aria-label="Loading..." size="xl" />
         </div>
       )}
-      {coverUrl && (
+      {coverImgUrl && (
         <div className="flex h-52 w-full flex-col items-center justify-center rounded-lg overflow-hidden border-2 border-gray-300 bg-gray-100 dark:border-gray-600 dark:bg-gray-700">
           <img
             className="w-full h-full object-cover"
-            src={coverUrl}
+            src={coverImgUrl}
             alt="cover url"
           />
         </div>

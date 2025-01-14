@@ -1,35 +1,33 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import ImageUploader from "../components/imageUploader";
 import DeletionMenu from "../components/deletionMenu";
-import VideoUploader from "../components/videoUploader";
 import Navigationbar from "../components/navbar";
 import Slider from "../components/slider";
 
-import { Label, Textarea, TextInput, Button } from "flowbite-react";
+import { Label, TextInput, Button } from "flowbite-react";
 
-import { createPost } from "../services/post/post.service";
+import { setFlash } from "../redux/slices/flash-slice";
 import { imgUploader } from "../services/cloudinary/img-uploader";
+import { createFrame } from "../services/post/post.service";
 
 import {
-  discard,
-  setDescription,
+  setFrameImgUrl,
   setTitle,
-} from "../redux/slices/post-creation-slice";
-import { setFlash } from "../redux/slices/flash-slice";
-import { setCoverUrl } from "../redux/slices/post-creation-slice";
+  discard,
+} from "../redux/slices/frames-creation.slice";
 
 function CreatePost() {
-  const dispatch = useDispatch();
   const sliderRef = useRef(null);
+  const dispatch = useDispatch();
 
   const { token } = useSelector((state) => state.token);
-  const { title, description, videoUrl, coverUrl } = useSelector(
-    (state) => state.postCreation
-  );
+  const { frameImgUrl, title } = useSelector((state) => state.framesCreation);
+  const [isFormValid, setIsFormValid] = useState(frameImgUrl && title);
 
-  const isFormValid = title && description && videoUrl && coverUrl;
+  useEffect(() => {
+    setIsFormValid(frameImgUrl && title);
+  }, [frameImgUrl, title]);
 
   const onDiscard = () => {
     dispatch(discard());
@@ -37,45 +35,30 @@ function CreatePost() {
 
   const onImgInputChange = async (e, setIsUploading) => {
     setIsUploading(true);
-    const result = await imgUploader(e.target.files[0]);
+    const result = await imgUploader(e.target.files[0], dispatch, token);
     if (result.success) {
-      dispatch(setCoverUrl(result.url));
-      dispatch(
-        setFlash({ type: "success", message: "Image Uploaded Succesfully" })
-      );
-    } else {
-      dispatch(setFlash({ type: "danger", message: result.message }));
+      dispatch(setFrameImgUrl(result.url));
     }
     setIsUploading(false);
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-
-    if (!videoUrl || !coverUrl || !title || !description) {
-      dispatch(
-        setFlash({
-          type: "danger",
-          message: "Please fill out all required fields!",
-        })
-      );
-      return;
-    }
-
-    const response = await createPost(
-      { title, description, videoUrl, coverUrl },
+    const { success, message, frame } = await createFrame(
+      {
+        title,
+        frameImgUrl,
+      },
       dispatch,
       token
     );
-
-    if (!response.success) {
-      dispatch(setFlash({ type: "danger", message: response.message }));
-      return;
+    if (!success) {
+      return dispatch(setFlash({ type: "danger", message }));
     }
-
     dispatch(
-      setFlash({ type: "success", message: "Course Published Successfully!" })
+      setFlash({ type: "success", message: "Frame created successfully" })
     );
+    dispatch(discard());
   };
 
   return (
@@ -86,8 +69,6 @@ function CreatePost() {
 
         <div className="flex-1 h-full relative z-10 overflow-hidden">
           <div className="w-full h-full relative flex justify-center items-center p-3 dark:bg-gray-900">
-            {!videoUrl && <VideoUploader />}
-
             <div className="absolute top-0 left-0">
               <DeletionMenu
                 warning={"Do you really want to discard."}
@@ -96,7 +77,10 @@ function CreatePost() {
             </div>
 
             <div className="w-full min-[440px]:w-96 shadow-md bg-[#fbfbfb] dark:bg-gray-800 p-2 rounded-lg">
-              <ImageUploader onChange={onImgInputChange} />
+              <ImageUploader
+                onChange={onImgInputChange}
+                coverImgUrl={frameImgUrl}
+              />
               <form
                 onSubmit={onSubmit}
                 className="w-full flex flex-col mt-2.5 gap-1.5"
@@ -111,18 +95,6 @@ function CreatePost() {
                     value={title}
                     onChange={(e) => dispatch(setTitle(e.target.value))}
                     required
-                  />
-                </div>
-
-                <div className="max-w-md">
-                  <Label htmlFor="comment" value="Description" />
-                  <Textarea
-                    id="comment"
-                    placeholder="Write the description...."
-                    value={description}
-                    onChange={(e) => dispatch(setDescription(e.target.value))}
-                    required
-                    rows={4}
                   />
                 </div>
 

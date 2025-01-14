@@ -1,9 +1,10 @@
 import { forwardRef } from "react";
 import { Link } from "react-router-dom";
 
-import { HiShoppingBag, HiUser, HiViewBoards, HiHome } from "react-icons/hi";
+import { HiUser, HiViewBoards, HiHome } from "react-icons/hi";
 import { IoCreate, IoLogIn } from "react-icons/io5";
 import { GiArchiveRegister } from "react-icons/gi";
+import { MdFilterFrames } from "react-icons/md";
 
 import Searchbar from "./searchbar";
 import { useSelector } from "react-redux";
@@ -42,6 +43,15 @@ const Slider = forwardRef((props, ref) => {
             </li>
             <li>
               <Link
+                to="/frames"
+                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+              >
+                <MdFilterFrames className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                <span className="flex-1 ms-3 whitespace-nowrap">Frames</span>
+              </Link>
+            </li>
+            <li>
+              <Link
                 to="/profile"
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
@@ -57,6 +67,17 @@ const Slider = forwardRef((props, ref) => {
                 <IoCreate className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                 <span className="flex-1 ms-3 whitespace-nowrap">
                   Create Post
+                </span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/create_frames"
+                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+              >
+                <IoCreate className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                <span className="flex-1 ms-3 whitespace-nowrap">
+                  Create Frame
                 </span>
               </Link>
             </li>

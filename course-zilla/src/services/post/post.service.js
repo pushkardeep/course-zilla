@@ -3,6 +3,7 @@ import { endpoints } from "../endpoints";
 import { discard } from "../../redux/slices/post-creation-slice";
 import { setLoading } from "../../redux/slices/loading-slice";
 import { setCourses } from "../../redux/slices/post-slice";
+import { setFrames } from "../../redux/slices/frames.slice";
 
 export const createPost = async (data, dispatch, token) => {
   if (!data) return { success: false, message: "All fields are required" };
@@ -97,6 +98,62 @@ export const searchCourse = async (query, dispatch, token) => {
       };
     }
     dispatch(setCourses(course));
+    return { success: true };
+  } catch (error) {
+    return { success: false, message: error.message || "Something went wrong" };
+  }
+};
+
+export const createFrame = async (data, dispatch, token) => {
+  try {
+    dispatch(setLoading(true));
+    const { success, message, frame } = await fetch(
+      data,
+      import.meta.env.VITE_SERVER_URI,
+      endpoints.CREATE_FRAME_API,
+      "POST",
+      undefined,
+      undefined,
+      token
+    );
+
+    if (!success) {
+      dispatch(setLoading(false));
+      return {
+        success: false,
+        message: message || "Something went wrong",
+      };
+    }
+    dispatch(setLoading(false));
+    return { success: true, frame };
+  } catch (error) {
+    dispatch(setLoading(false));
+    return { success: false, message: error.message || "Something went wrong" };
+  }
+};
+
+export const fetchFrames = async (dispatch, token) => {
+  try {
+    dispatch(setLoading(true));
+    const { success, message, frames } = await fetch(
+      undefined,
+      import.meta.env.VITE_SERVER_URI,
+      endpoints.GET_FRAMES_API,
+      "POST",
+      undefined,
+      undefined,
+      token
+    );
+
+    if (!success) {
+      dispatch(setLoading(false));
+      return {
+        success: false,
+        message: message || "Something went wrong",
+      };
+    }
+    dispatch(setLoading(false));
+    dispatch(setFrames(frames));
     return { success: true };
   } catch (error) {
     return { success: false, message: error.message || "Something went wrong" };

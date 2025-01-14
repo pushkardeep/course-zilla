@@ -7,6 +7,8 @@ import loadingSlice from "../slices/loading-slice";
 import flashSlice from "../slices/flash-slice";
 import postSlice from "../slices/post-slice";
 import watchingSlice from "../slices/watching-slice";
+import framesCreationSlice from "../slices/frames-creation.slice";
+import framesSlice from "../slices/frames.slice";
 
 export const rootReducer = combineReducers({
   user: userSlice,
@@ -14,6 +16,8 @@ export const rootReducer = combineReducers({
   loading: loadingSlice,
   flashMessage: flashSlice,
   courses: postSlice,
+  frames: framesSlice,
   watch: watchingSlice,
   postCreation: postCreationSlice,
+  framesCreation: framesCreationSlice,
 });

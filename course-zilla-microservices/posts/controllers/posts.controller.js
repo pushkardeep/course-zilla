@@ -1,6 +1,7 @@
 const postModel = require("../models/post.model");
 const userModal = require("../models/user.modal");
-const { create } = require("../services/post.service");
+const frameModel = require("../models/frame.model");
+const { create, makeFrame } = require("../services/post.service");
 const updatePostsInUser = require("../services/user.service");
 
 const createPost = async (req, res) => {
@@ -182,4 +183,63 @@ const searchCourse = async (req, res) => {
   }
 };
 
-module.exports = { createPost, getCourses, getVideo, searchCourse };
+const createFrame = async (req, res) => {
+  try {
+    const { frameImgUrl, title } = req.body;
+
+    const { _id } = req.user;
+
+    const { success, message, frame } = await makeFrame({ frameImgUrl, title });
+
+    if (!success) {
+      return res.status(400).json({
+        success: false,
+        message: message || "Frame creation error",
+      });
+    }
+
+    frame.user = _id;
+    await frame.save();
+
+    return res.status(200).json({
+      success: true,
+      frame,
+      message: "Frame created successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message || "An error occurred while creating frame",
+    });
+  }
+};
+
+const getFrames = async (req, res) => {
+  try {
+    const frames = await frameModel.find().populate("user");
+    if (!frames) {
+      return res.status(400).json({
+        success: false,
+        message: "Something went wrong",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      frames,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message || "An error occurred while fetching frames",
+    });
+  }
+};
+
+module.exports = {
+  createPost,
+  getCourses,
+  getVideo,
+  searchCourse,
+  createFrame,
+  getFrames,
+};

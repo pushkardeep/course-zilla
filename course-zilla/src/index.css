@@ -1,3 +1,43 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.masonary-grid {
+  column-count: 1;
+  column-gap: 15px;
+}
+
+.masonary-grid-item {
+  break-inside: avoid;
+  margin-bottom: 15px;
+}
+
+@media (min-width: 450px) {
+  .masonary-grid {
+    column-count: 2;
+  }
+}
+
+@media (min-width: 640px) {
+  .masonary-grid {
+    column-count: 3;
+  }
+}
+
+@media (min-width: 768px) {
+  .masonary-grid {
+    column-count: 2;
+  }
+}
+
+@media (min-width: 900px) {
+  .masonary-grid {
+    column-count: 3;
+  }
+}
+
+@media (min-width: 1200px) {
+  .masonary-grid {
+    column-count: 4;
+  }
+}

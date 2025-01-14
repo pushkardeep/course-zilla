@@ -7,7 +7,9 @@ import SignIn from "./pages/signIn";
 import Feed from "./pages/feed";
 import CreatePost from "./pages/createPost";
 import Profile from "./pages/profile";
-import  Video  from "./pages/video";
+import Video from "./pages/video";
+import Frames from "./pages/Frames";
+import CreateFrames from "./pages/CreateFrames";
 
 import Protected from "./components/protected";
 import OpenRoutes from "./components/openRoutes";
@@ -70,7 +72,24 @@ function App() {
             </Protected>
           }
         />
+        <Route
+          path="/frames"
+          element={
+            <Protected>
+              <Frames />
+            </Protected>
+          }
+        />
+        <Route
+          path="/create_frames"
+          element={
+            <Protected>
+              <CreateFrames />
+            </Protected>
+          }
+        />
       </Routes>
+
       <Loader />
     </BrowserRouter>
   );
